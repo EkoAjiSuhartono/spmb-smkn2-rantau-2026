@@ -5,93 +5,521 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SPMB 2026 – SMK Negeri 2 Rantau</title>
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+      /* Hanya untuk hal yang tidak bisa murni pakai utility:
+         pseudo hover-parent→child, keyframe animasi, clamp(), dan media query override */
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background: #f8f9ff;
+        color: #1a1a2e;
+        padding-top: 64px;
+        overflow-x: hidden;
+      }
+      @media (max-width: 768px) {
+        body {
+          padding-top: 58px;
+        }
+      }
+      @media (max-width: 480px) {
+        body {
+          padding-top: 54px;
+        }
+      }
+
+      section {
+        scroll-margin-top: 64px;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      /* Navbar scroll */
+      #mainNav {
+        transition:
+          box-shadow 0.3s,
+          padding 0.3s;
+      }
+      #mainNav.scrolled {
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Nav-link hover */
+      .nav-link {
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff !important;
+      }
+
+      /* Hero gradient */
+      #hero-section {
+        background: linear-gradient(
+          150deg,
+          #0b2d72 0%,
+          #0e3a8c 60%,
+          #1a4db5 100%
+        );
+        min-height: 50svh;
+      }
+      @media (max-width: 768px) {
+        #hero-section {
+          padding: 8px 12px 0 !important;
+        }
+      }
+      @media (max-width: 480px) {
+        #hero-section {
+          padding: 20px 10px 0 !important;
+        }
+      }
+
+      /* Hero text responsive */
+      @media (max-width: 992px) {
+        .hero-title {
+          white-space: normal !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .hero-title {
+          white-space: normal !important;
+          font-size: clamp(1.2rem, 6.2vw, 2rem) !important;
+          margin-bottom: 8px;
+        }
+        .hero-content {
+          padding-bottom: 68px !important;
+        }
+        .hero-logo-img {
+          width: 50% !important;
+          max-width: 25% !important;
+        }
+        .hero-logo-wrap {
+          margin-bottom: 8px !important;
+        }
+        .hero-eyebrow {
+          font-size: 0.7rem !important;
+          margin-bottom: 6px !important;
+        }
+        .hero-desc {
+          font-size: clamp(0.8rem, 3.1vw, 0.93rem) !important;
+          margin-bottom: 16px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: clamp(1.05rem, 5.8vw, 1.6rem) !important;
+        }
+        .hero-content {
+          padding-bottom: 62px !important;
+        }
+        .hero-logo-img {
+          max-width: 40% !important;
+        }
+        .hero-logo-wrap {
+          margin-bottom: 6px !important;
+        }
+      }
+      @media (max-width: 360px) {
+        .hero-title {
+          font-size: 1.05rem !important;
+          white-space: normal !important;
+        }
+        .hero-logo-img {
+          max-width: 30% !important;
+        }
+      }
+
+      /* btn-hero hover */
+      .btn-hero {
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .btn-hero:hover {
+        background: #ffe98a !important;
+        color: #081f52 !important;
+        transform: translateY(-3px);
+        box-shadow: 0 14px 36px rgba(245, 200, 66, 0.55);
+      }
+
+      /* Jurusan responsive */
+      @media (max-width: 992px) {
+        .jurusan-card {
+          grid-template-columns: 1fr !important;
+        }
+        .jurusan-slider-wrap,
+        .slider-track {
+          min-height: 300px !important;
+        }
+        .jurusan-info {
+          padding: 36px 28px !important;
+        }
+      }
+      @media (max-width: 768px) {
+        .jurusan-slider-wrap,
+        .slider-track {
+          min-height: 260px !important;
+        }
+        .jurusan-info {
+          padding: 26px 20px !important;
+        }
+      }
+      @media (max-width: 360px) {
+        .jurusan-info {
+          padding: 20px 14px !important;
+        }
+      }
+
+      /* Slider */
+      .slide {
+        transition: opacity 0.55s ease;
+      }
+      .slider-btn {
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .slider-btn:hover {
+        background: #fff !important;
+        transform: translateY(-50%) scale(1.1) !important;
+      }
+      .dot {
+        transition:
+          background 0.3s,
+          transform 0.3s;
+      }
+
+      /* Animations */
+      @keyframes bouncePulse {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      @keyframes waPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+        }
+        60% {
+          box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+        }
+      }
+      .btn-daftar-utama {
+        animation: bouncePulse 2.2s ease-in-out infinite;
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .btn-daftar-utama:hover {
+        animation: none !important;
+        transform: translateY(-3px) !important;
+      }
+      .btn-wa-group {
+        animation: waPulse 2s ease-in-out infinite;
+        transition:
+          transform 0.25s,
+          filter 0.2s;
+      }
+      .btn-wa-group:hover {
+        animation: none !important;
+        filter: brightness(1.08);
+        transform: translateY(-3px) !important;
+        color: #fff !important;
+      }
+
+      /* Pendaftaran responsive */
+      @media (max-width: 768px) {
+        .pendaftaran-card {
+          padding: 30px 18px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .pendaftaran-actions {
+          flex-direction: column !important;
+          align-items: stretch !important;
+        }
+        .btn-daftar-utama,
+        .btn-wa-group {
+          justify-content: center !important;
+        }
+        .pendaftaran-docs {
+          flex-direction: column !important;
+          align-items: stretch !important;
+        }
+        .doc-btn {
+          justify-content: center !important;
+        }
+      }
+      @media (max-width: 360px) {
+        .pendaftaran-card {
+          padding: 24px 12px !important;
+        }
+      }
+
+      /* Doc-btn hover */
+      .doc-btn {
+        transition:
+          background 0.2s,
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .doc-btn:hover {
+        background: rgba(11, 45, 114, 0.06) !important;
+        border-color: #0b2d72 !important;
+        transform: translateY(-2px);
+      }
+
+      /* Galeri hover parent→child */
+      .photo-wrap {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .galery-item:hover .photo-wrap {
+        transform: scale(1.05);
+        box-shadow: 6px 12px 32px rgba(0, 0, 0, 0.65) !important;
+      }
+      .photo-label {
+        transition: color 0.2s;
+      }
+      .galery-item:hover .photo-label {
+        color: #f5c842 !important;
+      }
+
+      @media (max-width: 768px) {
+        .galery-grid {
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 10px !important;
+          padding: 0 12px !important;
+        }
+      }
+      @media (max-width: 480px) {
+        .galery-grid {
+          gap: 8px !important;
+        }
+      }
+
+      /* Section padding mobile */
+      @media (max-width: 480px) {
+        .section-pad {
+          padding: 46px 0 52px !important;
+        }
+      }
+
+      /* Kontak hover parent→child */
+      .kontak-card {
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s,
+          border-color 0.25s;
+      }
+      .kontak-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba(11, 45, 114, 0.16) !important;
+        border-color: #25d366 !important;
+      }
+      .kontak-arrow {
+        transition:
+          transform 0.2s,
+          color 0.2s;
+      }
+      .kontak-card:hover .kontak-arrow {
+        transform: translateX(4px);
+        color: #25d366 !important;
+      }
+      @media (max-width: 768px) {
+        .kontak-grid {
+          grid-template-columns: 1fr !important;
+          max-width: 380px !important;
+        }
+      }
+
+      /* Social hover */
+      .social-link {
+        transition: color 0.2s;
+      }
+      .social-link:hover {
+        color: #f5c842 !important;
+      }
+
+      /* Footer responsive */
+      @media (max-width: 768px) {
+        .footer-inner {
+          flex-direction: column !important;
+          text-align: center !important;
+        }
+        .footer-socials {
+          justify-content: center !important;
+        }
+        .footer-copy {
+          width: 100% !important;
+          text-align: center !important;
+        }
+      }
+    </style>
   </head>
   <body id="beranda">
     <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
-    <nav
-      class="navbar navbar-expand-lg navbar-dark fixed-top scrolled"
-      id="mainNav"
-    >
-      <div class="container-fluid px-4">
-        <a class="navbar-brand" href="#beranda">
-          SPMB
-          <span class="brand-year">2026</span>
-        </a>
-        <button
-          class="navbar-toggler border-0"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto gap-1">
-            <li class="nav-item">
-              <a class="nav-link" href="#beranda">Beranda</a>
+    <nav id="mainNav" class="fixed top-0 w-full z-50 bg-[#081f52] py-2.5">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center">
+          <a
+            href="#"
+            class="flex items-center gap-[7px] text-[20px] font-black tracking-[1.5px] uppercase text-white no-underline whitespace-nowrap [text-shadow:0_2px_8px_rgba(0,0,0,0.4)] [font-family:Arial,Helvetica,sans-serif]"
+          >
+            SPMB <span class="text-[#f5c842]">2026</span>
+          </a>
+          <button
+            id="menuBtn"
+            class="lg:hidden text-white text-2xl focus:outline-none"
+          >
+            ☰
+          </button>
+          <ul class="hidden lg:flex gap-1 list-none m-0 p-0">
+            <li>
+              <a
+                href="#beranda"
+                class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-1.5 rounded-full no-underline"
+                >Beranda</a
+              >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#jurusan">Jurusan</a>
+            <li>
+              <a
+                href="#jurusan"
+                class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-1.5 rounded-full no-underline"
+                >Jurusan</a
+              >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#pendaftaran">Pendaftaran</a>
+            <li>
+              <a
+                href="#pendaftaran"
+                class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-1.5 rounded-full no-underline"
+                >Pendaftaran</a
+              >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#galery">Galeri</a>
+            <li>
+              <a
+                href="#galery"
+                class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-1.5 rounded-full no-underline"
+                >Galeri</a
+              >
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#kontak">Kontak</a>
+            <li>
+              <a
+                href="#kontak"
+                class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-1.5 rounded-full no-underline"
+                >Kontak</a
+              >
             </li>
           </ul>
+        </div>
+        <div id="mobileMenu" class="hidden flex-col pb-4 lg:hidden">
+          <a
+            href="#beranda"
+            class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-2 block rounded-full no-underline"
+            >Beranda</a
+          >
+          <a
+            href="#jurusan"
+            class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-2 block rounded-full no-underline"
+            >Jurusan</a
+          >
+          <a
+            href="#pendaftaran"
+            class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-2 block rounded-full no-underline"
+            >Pendaftaran</a
+          >
+          <a
+            href="#galery"
+            class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-2 block rounded-full no-underline"
+            >Galeri</a
+          >
+          <a
+            href="#kontak"
+            class="nav-link font-semibold text-[0.9rem] text-white/80 px-3 py-2 block rounded-full no-underline"
+            >Kontak</a
+          >
         </div>
       </div>
     </nav>
 
     <!-- ═══════════════════════════ HERO ═══════════════════════════ -->
-    <section id="hero-section">
-      <div class="hero-bg-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
+    <section
+      id="hero-section"
+      class="relative flex items-center justify-content-center overflow-hidden pt-20 px-4 pb-0"
+    >
+      <!-- BG Shapes -->
+      <div class="absolute inset-0 pointer-events-none overflow-hidden">
+        <div
+          class="absolute rounded-full opacity-[0.07] bg-white w-[420px] h-[420px] -top-[100px] -right-[120px]"
+        ></div>
+        <div
+          class="absolute rounded-full opacity-[0.07] bg-white w-[260px] h-[260px] bottom-10 -left-[70px]"
+        ></div>
+        <div
+          class="absolute rounded-full opacity-[0.04] bg-[#f5c842] w-[160px] h-[160px] top-[38%] left-[56%]"
+        ></div>
       </div>
+
       <div
-        class="container hero-content"
+        class="hero-content relative z-[2] w-full max-w-[640px] mx-auto text-center pb-20"
         data-aos="fade-up"
         data-aos-duration="900"
       >
-        <div class="hero-logo-wrap" data-aos="zoom-in" data-aos-delay="100">
+        <div
+          class="hero-logo-wrap flex justify-center items-center mb-3"
+          data-aos="zoom-in"
+          data-aos-delay="100"
+        >
           <img
             src="picture/smk.png"
             alt="Logo SMK Negeri 2 Rantau"
-            class="hero-logo-img"
+            class="hero-logo-img w-1/2 h-auto max-w-[40%] object-contain"
           />
         </div>
-
         <p
-          class="hero-eyebrow text-center"
+          class="hero-eyebrow text-center text-[0.78rem] font-bold tracking-[3px] uppercase text-[#f5c842] mb-2"
           data-aos="fade-up"
           data-aos-delay="200"
         >
           Sistem Penerimaan Murid Baru
         </p>
-        <h1 class="hero-title fw-bold" data-aos="fade-up" data-aos-delay="300">
+        <h1
+          class="hero-title font-sans font-black text-white leading-[1.2] mb-3 whitespace-nowrap text-[clamp(1.4rem,5.5vw,3.4rem)]"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
           SMK NEGERI 2 RANTAU
         </h1>
-        <p class="hero-desc" data-aos="fade-up" data-aos-delay="400">
+        <p
+          class="hero-desc text-white/75 leading-[1.7] max-w-[460px] mx-auto mb-[22px] px-1 text-[clamp(0.84rem,3.2vw,0.97rem)]"
+          data-aos="fade-up"
+          data-aos-delay="400"
+        >
           Informasi lengkap mengenai SPMB SMK Negeri 2 Rantau tersedia melalui
           kontak WhatsApp kami di bawah ini.
         </p>
         <div class="text-center" data-aos="fade-up" data-aos-delay="500">
-          <a href="#pendaftaran" class="btn-hero">
+          <a
+            href="#pendaftaran"
+            class="hover:bg-yellow-500 hover:text-slate-900 inline-flex items-center gap-2 bg-[#f5c842] text-[#081f52] font-extrabold text-[clamp(0.86rem,3.2vw,0.97rem)] py-3 px-7 rounded-full no-underline shadow-md"
+          >
             Daftar Sekarang
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,11 +536,13 @@
           </a>
         </div>
       </div>
-      <div class="hero-wave">
+
+      <div class="absolute bottom-[-2px] left-0 right-0 leading-[0]">
         <svg
           viewBox="0 0 1440 80"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
+          class="w-full h-[60px]"
         >
           <path
             d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"
@@ -123,54 +553,128 @@
     </section>
 
     <!-- ═══════════════════════════ JURUSAN ═══════════════════════════ -->
-    <section id="jurusan" class="section-jurusan">
-      <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-          <span class="pill-tag">Program Keahlian</span>
-          <h2 class="section-title">Jurusan</h2>
+    <section id="jurusan" class="section-pad py-[70px] bg-[#f8f9ff]">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-10" data-aos="fade-up">
+          <span
+            class="inline-block text-[0.7rem] font-extrabold tracking-[2px] uppercase text-[#0b2d72] bg-[rgba(11,45,114,0.08)] border border-[rgba(11,45,114,0.18)] py-1 px-[14px] rounded-full mb-2.5"
+            >Program Keahlian</span
+          >
+          <h2
+            class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.6rem,5vw,2.6rem)] font-black text-[#1a1a2e] leading-[1.2]"
+          >
+            Jurusan
+          </h2>
         </div>
 
-        <div class="jurusan-card" data-aos="fade-up" data-aos-delay="150">
-          <div class="jurusan-info">
-            <span class="jurusan-badge">Kecantikan dan Spa</span>
-            <h3 class="jurusan-name">Tata Kecantikan<br />Kulit dan Rambut</h3>
-            <p class="jurusan-desc">
+        <div
+          class="jurusan-card grid grid-cols-2 bg-white rounded-[28px] shadow-[0_20px_60px_rgba(11,45,114,0.22)] overflow-hidden border border-[rgba(11,45,114,0.07)]"
+          data-aos="fade-up"
+          data-aos-delay="150"
+        >
+          <!-- Info -->
+          <div
+            class="jurusan-info flex flex-col justify-center gap-[14px] p-11"
+          >
+            <span
+              class="inline-block text-sm text-yellow-400 font-extrabold tracking-[2px] uppercase bg-[rgba(245,200,66,0.12)] border border-yellow-500 py-1 px-3 rounded-full w-fit"
+              >Kecantikan dan Spa</span
+            >
+            <h3
+              class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.3rem,3vw,2rem)] font-black text-[#0b2d72] leading-[1.25]"
+            >
+              Tata Kecantikan<br />Kulit dan Rambut
+            </h3>
+            <p class="text-[0.9rem] text-[#64748b] leading-[1.7]">
               Program keahlian yang membekali siswa dengan keterampilan
               profesional di bidang kecantikan, perawatan kulit, dan tata rias
               rambut sesuai standar industri.
             </p>
-            <div class="jurusan-tags">
-              <span>Perawatan Kulit</span>
-              <span>Tata Rias</span>
-              <span>Hair Styling</span>
-              <span>Kecantikan Modern</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Perawatan Kulit</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Tata Rias</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Hair Styling</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Kecantikan Modern</span
+              >
             </div>
           </div>
 
-          <div class="jurusan-slider-wrap">
-            <div class="slider-track" id="sliderTrack">
-              <div class="slide active">
-                <img src="picture/TKKR 1.png" alt="Tata Kecantikan 1" />
+          <!-- Slider -->
+          <div
+            class="jurusan-slider-wrap relative bg-[#081f52] overflow-hidden min-h-[360px]"
+          >
+            <div
+              class="slider-track relative w-full h-full min-h-[360px]"
+              id="sliderTrack"
+            >
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 1.png"
+                  alt="Tata Kecantikan 1"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
-              <div class="slide">
-                <img src="picture/TKKR 1.png" alt="Tata Kecantikan 2" />
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 1.png"
+                  alt="Tata Kecantikan 2"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
-              <div class="slide">
-                <img src="picture/TKKR 2.png" alt="Tata Kecantikan 3" />
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 2.png"
+                  alt="Tata Kecantikan 3"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
-              <div class="slide">
-                <img src="picture/TKKR 3.png" alt="Tata Kecantikan 4" />
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 3.png"
+                  alt="Tata Kecantikan 4"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
-              <div class="slide">
-                <img src="picture/TKKR 4.png" alt="Tata Kecantikan 5" />
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 4.png"
+                  alt="Tata Kecantikan 5"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
-              <div class="slide">
-                <img src="picture/TKKR 5.png" alt="Tata Kecantikan 6" />
+              <div
+                class="slide absolute inset-0 opacity-0 flex items-center justify-center overflow-hidden bg-[#081f52]"
+              >
+                <img
+                  src="picture/TKKR 5.png"
+                  alt="Tata Kecantikan 6"
+                  class="w-full h-full object-contain bg-[#081f52]"
+                />
               </div>
             </div>
-
             <button
-              class="slider-btn slider-prev"
+              class="slider-btn absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 text-[#0b2d72] border-none rounded-full cursor-pointer flex items-center justify-center shadow-[0_2px_12px_rgba(11,45,114,0.1)] left-2.5"
               id="sliderPrev"
               aria-label="Sebelumnya"
             >
@@ -188,7 +692,7 @@
               </svg>
             </button>
             <button
-              class="slider-btn slider-next"
+              class="slider-btn absolute top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/90 text-[#0b2d72] border-none rounded-full cursor-pointer flex items-center justify-center shadow-[0_2px_12px_rgba(11,45,114,0.1)] right-2.5"
               id="sliderNext"
               aria-label="Berikutnya"
             >
@@ -205,29 +709,192 @@
                 />
               </svg>
             </button>
+            <div
+              class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-[7px] z-10"
+              id="sliderDots"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <div class="slider-dots" id="sliderDots"></div>
+    <!-- ── TKJ & TBSM ── -->
+    <section class="section-pad py-[70px] bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+        <!-- TKJ Card — info di kiri, gambar di kanan -->
+        <div
+          class="jurusan-card grid grid-cols-2 bg-white rounded-[28px] shadow-[0_20px_60px_rgba(11,45,114,0.22)] overflow-hidden border border-[rgba(11,45,114,0.07)] mb-8"
+          data-aos="fade-up"
+          data-aos-delay="150"
+        >
+          <!-- Info -->
+          <div
+            class="jurusan-info flex flex-col justify-center gap-[14px] p-11"
+          >
+            <span
+              class="inline-block text-sm font-extrabold tracking-[2px] uppercase text-yellow-400 bg-[rgba(245,200,66,0.12)] border border-[rgba(245,200,66,0.35)] py-1 px-3 rounded-lg w-fit"
+            >
+              Teknik Komputer Jaringan <br />
+              dan Informatika
+            </span>
+            <h3
+              class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.3rem,3vw,2rem)] font-black text-[#0b2d72] leading-[1.25]"
+            >
+              Teknik Komputer<br />dan Jaringan
+            </h3>
+            <p class="text-[0.9rem] text-[#64748b] leading-[1.7]">
+              Mempelajari perakitan komputer, instalasi dan pengelolaan
+              jaringan, serta teknologi informasi untuk menunjang kebutuhan
+              dunia kerja di era digital
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Jaringan Komputer</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Perakitan Komputer</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Informatika</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >IT Support</span
+              >
+            </div>
+          </div>
+
+          <!-- Gambar -->
+          <div
+            class="relative bg-[#081f52] overflow-hidden min-h-[360px] flex items-center justify-center"
+          >
+            <img
+              src="picture/tkj.jpeg"
+              alt="Teknik Komputer dan Jaringan"
+              class="w-full h-full object-contain bg-[#081f52]"
+              onerror="
+                this.style.display = 'none';
+                this.parentElement.querySelector(
+                  '.img-placeholder',
+                ).style.display = 'flex';
+              "
+            />
+
+            <p
+              class="absolute bottom-3 left-0 right-0 text-center text-white/50 text-[0.7rem] font-semibold italic"
+            >
+              *Gambar hanya ilustrasi
+            </p>
+          </div>
+        </div>
+
+        <!-- TBSM Card — info di kiri, gambar di kanan -->
+        <div
+          class="jurusan-card grid grid-cols-2 bg-white rounded-[28px] shadow-[0_20px_60px_rgba(11,45,114,0.22)] overflow-hidden border border-[rgba(11,45,114,0.07)]"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <!-- Info -->
+          <div
+            class="jurusan-info flex flex-col justify-center gap-[14px] p-11"
+          >
+            <span
+              class="inline-block text-sm font-extrabold tracking-[2px] uppercase text-yellow-400 bg-[rgba(245,200,66,0.12)] border border-[rgba(245,200,66,0.35)] py-1 px-3 rounded-full w-fit"
+            >
+              Teknik Otomotif
+            </span>
+            <h3
+              class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.3rem,3vw,2rem)] font-black text-[#0b2d72] leading-[1.25]"
+            >
+              Teknik Bisnis<br />Sepeda Motor
+            </h3>
+            <p class="text-[0.9rem] text-[#64748b] leading-[1.7]">
+              Program keahlian yang membekali siswa dengan keterampilan
+              perawatan, perbaikan, dan pengelolaan bisnis di bidang otomotif
+              sepeda motor sesuai standar industri.
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Servis Mesin</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Kelistrikan Motor</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Teknologi Otomotif</span
+              >
+              <span
+                class="text-[0.7rem] font-bold text-[#0b2d72] bg-[#f8f9ff] border border-[rgba(11,45,114,0.15)] py-[3px] px-2.5 rounded-full"
+                >Bisnis Bengkel</span
+              >
+            </div>
+          </div>
+
+          <!-- Gambar -->
+          <div
+            class="relative bg-[#081f52] overflow-hidden min-h-[360px] flex items-center justify-center"
+          >
+            <img
+              src="picture/tbsm.jpeg"
+              alt="Teknik Bisnis Sepeda Motor"
+              class="w-full h-full object-contain bg-[#081f52]"
+              onerror="
+                this.style.display = 'none';
+                this.parentElement.querySelector(
+                  '.img-placeholder',
+                ).style.display = 'flex';
+              "
+            />
+
+            <p
+              class="absolute bottom-3 left-0 right-0 text-center text-white/50 text-[0.7rem] font-semibold italic"
+            >
+              *Gambar hanya ilustrasi
+            </p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- ═══════════════════════════ PENDAFTARAN ═══════════════════════════ -->
-    <section id="pendaftaran" class="section-pendaftaran">
-      <div class="pendaftaran-bg-decor"></div>
-      <div class="container">
+    <section
+      id="pendaftaran"
+      class="section-pad relative py-[70px] overflow-hidden"
+      style="background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%)"
+    >
+      <div
+        class="absolute w-[460px] h-[460px] -top-20 -right-20 pointer-events-none rounded-full"
+        style="
+          background: radial-gradient(
+            circle,
+            rgba(11, 45, 114, 0.07) 0%,
+            transparent 70%
+          );
+        "
+      ></div>
+      <div class="max-w-7xl mx-auto px-4">
         <div
-          class="pendaftaran-card"
+          class="pendaftaran-card max-w-[660px] mx-auto bg-white rounded-[28px] shadow-[0_20px_60px_rgba(11,45,114,0.22)] p-[48px_40px] text-center border border-[rgba(11,45,114,0.07)]"
           data-aos="zoom-in"
           data-aos-duration="700"
         >
-          <div class="pendaftaran-icon-wrap">
+          <div
+            class="w-[74px] h-[74px] rounded-full flex items-center justify-center mx-auto mb-5 text-[#f5c842] shadow-[0_8px_24px_rgba(11,45,114,0.3)]"
+            style="
+              background: linear-gradient(135deg, #0b2d72 0%, #0e3a8c 100%);
+            "
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
               fill="currentColor"
-              class="bi bi-clipboard-fill"
               viewBox="0 0 16 16"
             >
               <path
@@ -236,27 +903,34 @@
               />
             </svg>
           </div>
-          <h2 class="pendaftaran-title">Ayoo! Daftar Online Sekarang</h2>
-          <p class="pendaftaran-sub">
+          <h2
+            class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.3rem,5vw,1.9rem)] font-black text-[#0b2d72] mb-2.5"
+          >
+            Ayoo! Daftar Online Sekarang
+          </h2>
+          <p class="text-[#64748b] text-[0.93rem] leading-[1.65] mb-[30px]">
             Bergabunglah bersama kami dan wujudkan impianmu di SMK Negeri 2
             Rantau
           </p>
-          <div class="pendaftaran-actions">
+
+          <div
+            class="pendaftaran-actions flex flex-wrap justify-center gap-[14px] mb-7"
+          >
             <a
               href="https://forms.gle/kJX1xREekcdzQbA68"
-              class="btn-daftar-utama"
-              >Daftar Sekarang</a
+              class="btn-daftar-utama inline-flex items-center gap-2 bg-[#0b2d72] text-white font-extrabold text-[0.93rem] py-[13px] px-[30px] rounded-full no-underline shadow-[0_8px_24px_rgba(11,45,114,0.3)]"
             >
+              Daftar Sekarang
+            </a>
             <a
               href="https://chat.whatsapp.com/DmouIYEDbSzFiqtKzEzCyn?mode=gi_t"
-              class="btn-wa-group"
+              class="btn-wa-group inline-flex items-center gap-2 bg-[#25d366] text-white font-extrabold text-[0.93rem] py-[13px] px-6 rounded-full no-underline"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="22"
                 height="22"
                 fill="currentColor"
-                class="bi bi-whatsapp"
                 viewBox="0 0 16 16"
               >
                 <path
@@ -267,10 +941,12 @@
             </a>
           </div>
 
-          <div class="pendaftaran-docs">
+          <div
+            class="pendaftaran-docs flex flex-wrap justify-center gap-2.5 pt-[22px] border-t border-[rgba(11,45,114,0.08)]"
+          >
             <a
               href="https://drive.google.com/drive/folders/1fCHaeqBW3AKUU-EwXZjHl1JU8pR-J1ym?usp=drive_link"
-              class="doc-btn"
+              class="doc-btn inline-flex items-center gap-[7px] text-[#0b2d72] bg-[#f8f9ff] border-[1.5px] border-[rgba(11,45,114,0.15)] font-bold text-[0.83rem] py-[9px] px-[18px] rounded-full no-underline"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +966,7 @@
             </a>
             <a
               href="https://drive.google.com/drive/folders/1-a-mHmeP_Ns-S680q57OokokghU9a3WT?usp=drive_link"
-              class="doc-btn"
+              class="doc-btn inline-flex items-center gap-[7px] text-[#0b2d72] bg-[#f8f9ff] border-[1.5px] border-[rgba(11,45,114,0.15)] font-bold text-[0.83rem] py-[9px] px-[18px] rounded-full no-underline"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -314,66 +990,171 @@
     </section>
 
     <!-- ═══════════════════════════ GALERI ═══════════════════════════ -->
-    <section id="galery" class="section-galery">
-      <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-          <span class="jurusan-badge">Dokumentasi Kegiatan</span>
-          <h2 class="section-title text-light">GALLERY</h2>
+    <section id="galery" class="section-pad py-[70px] bg-[#0b2d72]">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-10" data-aos="fade-up">
+          <span
+            class="inline-block text-[0.7rem] font-extrabold tracking-[2px] uppercase text-[#f5c842] bg-[rgba(245,200,66,0.12)] border border-[rgba(245,200,66,0.35)] py-1 px-3 rounded-full mb-2.5"
+            >Dokumentasi Kegiatan</span
+          >
+          <h2
+            class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.6rem,5vw,2.6rem)] font-black text-white leading-[1.2]"
+          >
+            GALLERY
+          </h2>
         </div>
       </div>
-      <div class="galery-grid">
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="0">
-          <div class="photo-wrap">
-            <img src="picture/jumat_bersih.png" alt="Jumat Bersih" />
+      <div class="galery-grid grid grid-cols-3 gap-x-5 gap-y-6 px-[22px]">
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="0"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
+            <img
+              src="picture/jumat_bersih.png"
+              alt="Jumat Bersih"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="photo-label">Jumat Bersih</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Jumat Bersih
+          </p>
         </div>
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="80">
-          <div class="photo-wrap">
-            <img src="picture/jalan_sehat.png" alt="Jumat Sehat" />
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="80"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
+            <img
+              src="picture/jalan_sehat.png"
+              alt="Jalan Sehat"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="photo-label">Jalan Sehat</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Jalan Sehat
+          </p>
         </div>
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="160">
-          <div class="photo-wrap">
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="160"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
             <img
               src="picture/Keterampian_Seni.png"
               alt="Keterampilan Seni Tari"
+              class="w-full h-full object-cover"
             />
           </div>
-          <p class="photo-label">Keterampilan Seni Tari</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Keterampilan Seni Tari
+          </p>
         </div>
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="240">
-          <div class="photo-wrap">
-            <img src="picture/Lomba 17 Agustus.png" alt="Lomba 17" />
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="240"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
+            <img
+              src="picture/Lomba 17 Agustus.png"
+              alt="Lomba 17"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="photo-label">Lomba 17 Agustus</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Lomba 17 Agustus
+          </p>
         </div>
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="320">
-          <div class="photo-wrap">
-            <img src="picture/Jumat_senam.png" alt="Senam Sehat" />
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="320"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
+            <img
+              src="picture/Jumat_senam.png"
+              alt="Senam Sehat"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="photo-label">Senam Sehat</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Senam Sehat
+          </p>
         </div>
-        <div class="galery-item" data-aos="zoom-in" data-aos-delay="320">
-          <div class="photo-wrap">
-            <img src="picture/upacara_senin.png" alt="Upacara Senin" />
+        <div
+          class="galery-item flex flex-col items-center"
+          data-aos="zoom-in"
+          data-aos-delay="320"
+        >
+          <div
+            class="photo-wrap w-full aspect-[4/3] border-[9px] border-white rounded-[4px] overflow-hidden shadow-[4px_6px_18px_rgba(0,0,0,0.45)]"
+          >
+            <img
+              src="picture/upcara bendera.jpeg"
+              alt="Upacara Senin"
+              class="w-full h-full object-cover"
+            />
           </div>
-          <p class="photo-label">Upacara Senin</p>
+          <p
+            class="photo-label mt-2.5 text-[0.78rem] font-bold text-white/85 text-center"
+          >
+            Upacara Senin
+          </p>
         </div>
       </div>
     </section>
 
     <!-- ═══════════════════════════ KONTAK ═══════════════════════════ -->
-    <section id="kontak" class="section-kontak">
-      <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-          <span class="pill-tag">Hubungi Kami</span>
-          <h2 class="section-title">Informasi Lebih Lanjut</h2>
+    <section id="kontak" class="section-pad py-[70px] bg-[#f8f9ff]">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-10" data-aos="fade-up">
+          <span
+            class="inline-block text-[0.7rem] font-extrabold tracking-[2px] uppercase text-[#0b2d72] bg-[rgba(11,45,114,0.08)] border border-[rgba(11,45,114,0.18)] py-1 px-[14px] rounded-full mb-2.5"
+            >Hubungi Kami</span
+          >
+          <h2
+            class="[font-family:'Playfair_Display',Georgia,serif] text-[clamp(1.6rem,5vw,2.6rem)] font-black text-[#1a1a2e] leading-[1.2]"
+          >
+            Informasi Lebih Lanjut
+          </h2>
         </div>
-        <div class="kontak-grid" data-aos="fade-up" data-aos-delay="100">
-          <a href="https://wa.me/6287762450767" class="kontak-card">
-            <div class="kontak-icon wa">
+        <div
+          class="kontak-grid grid gap-[18px] max-w-[960px] mx-auto"
+          style="grid-template-columns: repeat(3, 1fr)"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <a
+            href="https://wa.me/6287762450767"
+            class="kontak-card flex items-center gap-[14px] bg-white border-[1.5px] border-[rgba(11,45,114,0.1)] rounded-[20px] p-5 no-underline shadow-[0_2px_12px_rgba(11,45,114,0.1)]"
+          >
+            <div
+              class="w-[50px] h-[50px] rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(37,211,102,0.12)] text-[#25d366]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="26"
@@ -387,11 +1168,17 @@
               </svg>
             </div>
             <div>
-              <p class="kontak-label">Panitia SPMB</p>
-              <p class="kontak-name">Akhmad Muttakin</p>
+              <p
+                class="text-[0.72rem] font-bold text-[#64748b] tracking-[0.5px] uppercase mb-0.5"
+              >
+                Panitia SPMB
+              </p>
+              <p class="text-[0.97rem] font-bold text-[#0b2d72] m-0">
+                Akhmad Muttakin
+              </p>
             </div>
             <svg
-              class="kontak-arrow"
+              class="kontak-arrow ml-auto text-[#64748b] flex-shrink-0"
               xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
@@ -405,8 +1192,13 @@
             </svg>
           </a>
 
-          <a href="https://wa.me/6289631500203" class="kontak-card">
-            <div class="kontak-icon wa">
+          <a
+            href="https://wa.me/6287810825053"
+            class="kontak-card flex items-center gap-[14px] bg-white border-[1.5px] border-[rgba(11,45,114,0.1)] rounded-[20px] p-5 no-underline shadow-[0_2px_12px_rgba(11,45,114,0.1)]"
+          >
+            <div
+              class="w-[50px] h-[50px] rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(37,211,102,0.12)] text-[#25d366]"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="26"
@@ -420,11 +1212,61 @@
               </svg>
             </div>
             <div>
-              <p class="kontak-label">Panitia SPMB</p>
-              <p class="kontak-name">Sifa Nurazizah</p>
+              <p
+                class="text-[0.72rem] font-bold text-[#64748b] tracking-[0.5px] uppercase mb-0.5"
+              >
+                Panitia SPMB
+              </p>
+              <p class="text-[0.97rem] font-bold text-[#0b2d72] m-0">
+                Ermina Azizah
+              </p>
             </div>
             <svg
-              class="kontak-arrow"
+              class="kontak-arrow ml-auto text-[#64748b] flex-shrink-0"
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708"
+              />
+            </svg>
+          </a>
+
+          <a
+            href="https://wa.me/6289631500203"
+            class="kontak-card flex items-center gap-[14px] bg-white border-[1.5px] border-[rgba(11,45,114,0.1)] rounded-[20px] p-5 no-underline shadow-[0_2px_12px_rgba(11,45,114,0.1)]"
+          >
+            <div
+              class="w-[50px] h-[50px] rounded-full flex items-center justify-center flex-shrink-0 bg-[rgba(37,211,102,0.12)] text-[#25d366]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="26"
+                height="26"
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M13.601 2.326A7.85 7.85 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.9 7.9 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326zM7.994 14.521a6.6 6.6 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592m3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.73.73 0 0 0-.529.247c-.182.198-.691.677-.691 1.654s.71 1.916.81 2.049c.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232"
+                />
+              </svg>
+            </div>
+            <div>
+              <p
+                class="text-[0.72rem] font-bold text-[#64748b] tracking-[0.5px] uppercase mb-0.5"
+              >
+                Panitia SPMB
+              </p>
+              <p class="text-[0.97rem] font-bold text-[#0b2d72] m-0">
+                Sifa Nurazizah
+              </p>
+            </div>
+            <svg
+              class="kontak-arrow ml-auto text-[#64748b] flex-shrink-0"
               xmlns="http://www.w3.org/2000/svg"
               width="18"
               height="18"
@@ -442,14 +1284,18 @@
     </section>
 
     <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
-    <footer class="site-footer">
-      <div class="container">
-        <div class="footer-inner">
-          <p class="footer-school">SMK Negeri 2 Rantau</p>
-          <div class="footer-socials">
+    <footer class="bg-[#081f52] text-white/65 py-6">
+      <div class="max-w-7xl mx-auto px-4">
+        <div
+          class="footer-inner flex flex-wrap items-center justify-between gap-2.5"
+        >
+          <p class="font-extrabold text-[0.93rem] text-white m-0">
+            SMK Negeri 2 Rantau
+          </p>
+          <div class="footer-socials flex items-center gap-5">
             <a
               href="https://www.instagram.com/smkn2_rantau?igsh=ZDB2b3NzYTc5MG5p"
-              class="social-link"
+              class="social-link flex items-center gap-[7px] text-white/60 text-[0.85rem] font-semibold no-underline"
               aria-label="Instagram"
             >
               <svg
@@ -467,7 +1313,7 @@
             </a>
             <a
               href="https://www.tiktok.com/@smkn2rantau?_r=1&_t=ZS-94LvOCNOXSP"
-              class="social-link"
+              class="social-link flex items-center gap-[7px] text-white/60 text-[0.85rem] font-semibold no-underline"
               aria-label="TikTok"
             >
               <svg
@@ -484,14 +1330,18 @@
               smkn2rantau
             </a>
           </div>
-          <p class="footer-copy">
+          <p class="footer-copy text-[0.75rem] text-white/35 m-0">
             © 2026 SMK Negeri 2 Rantau. All rights reserved.
           </p>
         </div>
       </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const btn = document.getElementById("menuBtn");
+      const menu = document.getElementById("mobileMenu");
+      btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+    </script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script>
       AOS.init({ once: true, duration: 700 });
@@ -504,24 +1354,33 @@
       // ── Slider ──
       const slides = document.querySelectorAll(".slide");
       const dotsWrap = document.getElementById("sliderDots");
-      let current = 0;
-      let autoTimer;
+      let current = 0,
+        autoTimer;
 
       slides.forEach((_, i) => {
         const d = document.createElement("button");
-        d.className = "dot" + (i === 0 ? " active" : "");
+        d.className =
+          "dot w-[7px] h-[7px] rounded-full border-none cursor-pointer p-0 bg-white/40";
         d.addEventListener("click", () => goTo(i));
         dotsWrap.appendChild(d);
       });
 
       function goTo(n) {
-        slides[current].classList.remove("active");
-        dotsWrap.children[current].classList.remove("active");
+        slides[current].style.opacity = "0";
+        dotsWrap.children[current].style.cssText =
+          "background:rgba(255,255,255,0.4);transform:scale(1)";
         current = (n + slides.length) % slides.length;
-        slides[current].classList.add("active");
-        dotsWrap.children[current].classList.add("active");
+        slides[current].style.opacity = "1";
+        dotsWrap.children[current].style.cssText =
+          "background:#fff;transform:scale(1.35)";
         resetAuto();
       }
+
+      // Init
+      slides[0].style.opacity = "1";
+      dotsWrap.children[0] &&
+        (dotsWrap.children[0].style.cssText =
+          "background:#fff;transform:scale(1.35)");
 
       function resetAuto() {
         clearInterval(autoTimer);
